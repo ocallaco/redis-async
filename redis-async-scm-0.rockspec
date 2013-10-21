@@ -3,11 +3,11 @@ version = "scm-0"
 
 source = {
    url = "git://github.com/ocallaco/redis-async",
-   branch = "master",
+   branch = "master"
 }
 
 description = {
-   summary = "A redis client built off the torch/lua async framework"
+   summary = "A redis client built off the torch/lua async framework",
    detailed = [[
 A redis client built off the torch/lua async framework
    ]],
