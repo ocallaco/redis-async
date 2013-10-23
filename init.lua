@@ -1,4 +1,3 @@
-async = require 'async'
+redis = require 'redis_conn'
 
-
-print("IT WORKS")
+return redis
