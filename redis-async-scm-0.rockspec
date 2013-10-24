@@ -23,6 +23,9 @@ dependencies = {
 build = {
    type = "builtin",
    modules = {
-      ['redis-async.init'] = 'init.lua',
+      ['redis-async.init'] = './init.lua',
+      ['redis-async.redis_conn'] = './redis_conn.lua',
+      ['redis-async.codec'] = './codec.lua',
+      ['redis-async.commands'] = './commands.lua',
    }
 }

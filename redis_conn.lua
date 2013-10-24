@@ -7,8 +7,8 @@ local GET = "GET"
 local SET = "SET"
 
 RedisClient = {}
-local codec = require './codec'
-local commands = require './commands'
+local codec = require 'redis-async.codec'
+local commands = require 'redis-async.commands'
 
 
 function RedisClient.connect(domain, cb)
@@ -21,25 +21,30 @@ function RedisClient.connect(domain, cb)
 
       for _,command in ipairs(commands) do 
          client[command:lower()] = function(...)
-            local args = List.new({command, ...})
-            local last_arg = args[#args]
+            local com_args = List.new({command, ...})
+            local last_arg = com_args[#com_args]
 
-            local cb = function(res) return res end
+            local callback = function(res) return res end
 
-            if type(last_arg == 'function') then
-               cb = args:pop()
+            if type(last_arg) == 'function' then
+               callback = com_args:pop()
             end
 
-            client.send(args)
+            client.send(com_args)
 
-            client.callback_queue:append(cb)
+            client.callback_queue:append(callback)
+
          end
       end
 
       client.ondata(function(data)
-         res = codec.decode(data)
+         local res = codec.decode(data)
+
          local callback = client.callback_queue:pop(1)
-         callback(res)
+
+         if callback then
+            callback(res)
+         end
       end)
 
       client.callback_queue = List.new()

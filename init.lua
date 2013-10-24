@@ -1,3 +1,3 @@
-redis = require 'redis_conn'
+redis = require 'redis-async.redis_conn'
 
 return redis
