@@ -1,5 +1,6 @@
 -- tcp
 local tcp = require 'async.tcp'
+local Buffer = require 'buffer'
 
 -- redis commands
 
@@ -32,22 +33,22 @@ function RedisClient.connect(domain, cb)
 
             client.send(com_args)
 
-            client.callback_queue:append(callback)
+            client.callbackQueue:append(callback)
 
          end
       end
 
-      client.ondata(function(data)
-         local res = codec.decode(data)
+      client.onsplitdata(codec.splitMessages, function(chunk)
+         local res = codec.decode(chunk)
 
-         local callback = client.callback_queue:pop(1)
+         local callback = client.callbackQueue:pop(1)
 
          if callback then
             callback(res)
          end
       end)
 
-      client.callback_queue = List.new()
+      client.callbackQueue = List.new()
 
       cb(client)
    end)

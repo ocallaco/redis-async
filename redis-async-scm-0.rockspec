@@ -17,7 +17,8 @@ A redis client built off the torch/lua async framework
 
 dependencies = {
    "async",
-   "sys >= 1.0"
+   "sys >= 1.0",
+   "buffer",
 }
 
 build = {
