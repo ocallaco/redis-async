@@ -1,4 +1,4 @@
-return {
+return { single = {
 'APPEND',
 'AUTH',
 'BGREWRITEAOF',
@@ -69,7 +69,6 @@ return {
 'PING',
 'PONG',
 'PSETEX',
-'PSUBSCRIBE',
 'PTTL',
 'PUBLISH',
 'PUNSUBSCRIBE',
@@ -104,14 +103,13 @@ return {
 'SRANDMEMBER',
 'SREM',
 'STRLEN',
-'SUBSCRIBE',
 'SUBSTR',
 'SUNION',
 'SUNIONSTORE',
 'TIME',
 'TTL',
 'TYPE',
-'UNSUBSCRIBE',
+--'UNSUBSCRIBE',
 'UNWATCH',
 'WATCH',
 'ZADD',
@@ -128,6 +126,11 @@ return {
 'ZREVRANGEBYSCORE',
 'ZREVRANK',
 'ZSCORE',
-'ZUNIONSTORE',
+'ZUNIONSTORE',},
+subscription = {
+'SUBSCRIBE',
+'PSUBSCRIBE',
+},
+
 }
 

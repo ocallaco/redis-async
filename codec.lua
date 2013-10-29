@@ -5,6 +5,9 @@
 -- :     58
 -- $     36
 
+-- forward declaring this
+local findMessageLimit
+
 local b = require 'buffer'
 
 local MSGTYPES = {
@@ -50,22 +53,42 @@ end
 
 local function decodeBulk(buffer)
    local entries = buffer:split(delim)
+
+   if entries[1].length == 2 and entries[1][1] == string.byte('-') and entries[1][2] == string.byte('1') then
+      return nil
+   end
+
    return entries[2]:toString()
 end
 
 local function decodeMultibulk(buffer)
-   local entries = buffer:split(delim)
-   local response = {}
-   for i = 3,#entries,2 do
-      table.insert(response, entries[i]:toString())
-   end
 
+   local limit = buffer:find(delim)
+
+   local num = tonumber(buffer:slice(1,limit):toString())
+
+   limit = limit + #delim
+
+   local response = {}
+
+   for i = 1,num do
+      local submessage = buffer:slice(limit, buffer.length)
+      limit = limit + findMessageLimit(submessage) 
+
+      table.insert(response, codec.decode(submessage))
+   end
    return response
 end
 
 local function findBulkLimit(buffer)
    local first_delim = buffer:find(delim)
+  
+   local num = tonumber(buffer:slice(2,first_delim):toString())
    
+   if num == -1 then
+      return limit + #delim
+   end
+
    if first_delim then 
       local msgend =  buffer:find(delim, first_delim + #delim)
       if msgend then
@@ -84,29 +107,15 @@ local function findMultiBulkLimit(buffer)
    limit = limit + #delim
 
    for i = 1,num do
-      limit = buffer:find(delim, limit)
-      if limit then 
-         limit = limit + #delim
-      else
-         return
-      end
-
-      limit = buffer:find(delim, limit)
-
-      if limit then 
-         limit = limit + #delim
-      else
-         return
-      end
-
+      limit = limit + findMessageLimit(buffer:slice(limit, buffer.length)) 
    end
 
    return limit - 1
 end
 
---local function findMessageLimit(message)
-local function findMessageLimit(message)
-   local buffer = b(message)
+--codec.findMessageLimit = function(message)
+findMessageLimit = function(message)
+   local buffer = message
    local msgtype = buffer[1]
 
    local limit 
