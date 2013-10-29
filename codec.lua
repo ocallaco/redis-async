@@ -82,11 +82,9 @@ end
 
 local function findBulkLimit(buffer)
    local first_delim = buffer:find(delim)
-  
-   local num = tonumber(buffer:slice(2,first_delim):toString())
    
-   if num == -1 then
-      return limit + #delim
+   if buffer.length >= 3 and buffer[2] == string.byte('-') and buffer[3] == string.byte('1') then
+      return first_delim + #delim
    end
 
    if first_delim then 
@@ -101,6 +99,7 @@ local function findMultiBulkLimit(buffer)
    local limit = buffer:find(delim)
 
    if limit == nil then return end
+
 
    local num = tonumber(buffer:slice(2,limit):toString())
 

@@ -1,4 +1,5 @@
 codec = require '../codec'
+b = require 'buffer'
 
 -- tests
 -- status
@@ -32,6 +33,8 @@ print(codec.decode(err_buff))
 -- bulk nil
 print('\n\ntesting bulk nil')
 err_buff = "$-1\r\n"
+--limit = codec.findMessageLimit(b(err_buff))
+--print('limit test: ' .. limit .. ' should be ' .. #err_buff)
 print(codec.decode(err_buff))
 
 -- bulk
