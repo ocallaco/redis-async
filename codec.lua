@@ -84,7 +84,7 @@ local function findBulkLimit(buffer)
    local first_delim = buffer:find(delim)
    
    if buffer.length >= 3 and buffer[2] == string.byte('-') and buffer[3] == string.byte('1') then
-      return first_delim + #delim
+      return first_delim + #delim - 1
    end
 
    if first_delim then 
@@ -174,6 +174,7 @@ codec.splitMessages = function(chunk)
   
       if limit ~= nil then
          limit = limit + start - 1
+         print("start " .. start .. " limit " .. limit .. ' length ' .. buffer.length)
          local msg = buffer:slice(start, limit)
          table.insert(messages, msg:toString())
       else 
