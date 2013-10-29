@@ -174,7 +174,6 @@ codec.splitMessages = function(chunk)
   
       if limit ~= nil then
          limit = limit + start - 1
-         print("start " .. start .. " limit " .. limit .. ' length ' .. buffer.length)
          local msg = buffer:slice(start, limit)
          table.insert(messages, msg:toString())
       else 
