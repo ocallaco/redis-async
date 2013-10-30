@@ -4,7 +4,7 @@ version = "scm-0"
 source = {
    url = "git://github.com/ocallaco/redis-async",
    branch = "master",
-   dir = "async",
+   dir = "redis-async",
 }
 
 description = {
