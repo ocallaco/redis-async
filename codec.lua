@@ -40,7 +40,7 @@ local function decodeError(buffer)
    limit = buffer:find(delim) - 1
    local msg = buffer:slice(start, limit):toString()
 
-   error("REDIS ERROR: " .. errtype .. ": " .. msg)
+   return {error = { errtype, msg}}
 end
 
 local function decodeNumber(buffer)
