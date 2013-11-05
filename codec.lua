@@ -103,7 +103,12 @@ local function findMultiBulkLimit(buffer)
    limit = limit + #delim
 
    for i = 1,num do
-      limit = limit + findMessageLimit(buffer:slice(limit, buffer.length)) 
+      newlimit = findMessageLimit(buffer:slice(limit, buffer.length)) 
+      if newlimit then
+         limit = limit + newlimit
+      else
+         return nil
+      end
    end
 
    return limit - 1
@@ -185,7 +190,7 @@ codec.splitMessages = function(chunk)
       incomplete = buffer:slice(index, buffer.length):toString()
    end
 
-   return messages, incomplete
+   return messages, incomplete 
 end
 
 return codec
