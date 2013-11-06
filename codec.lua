@@ -122,6 +122,11 @@ end
 --codec.findMessageLimit = function(message)
 findMessageLimit = function(message)
    local buffer = message
+
+   if buffer.length < 1 then
+      return nil
+   end
+
    local msgtype = buffer[1]
 
    local limit 
