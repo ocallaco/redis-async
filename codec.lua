@@ -78,6 +78,8 @@ local function decodeMultibulk(buffer)
 end
 
 local function findBulkLimit(buffer)
+   return nil if buffer.length < 1
+
    local first_delim = buffer:find(delim)
    
    if buffer.length >= 3 and buffer[2] == string.byte('-') and buffer[3] == string.byte('1') then
@@ -98,6 +100,7 @@ local function findBulkLimit(buffer)
 end
 
 local function findMultiBulkLimit(buffer)
+   return nil if buffer.length < 1
    local limit = buffer:find(delim)
 
    if limit == nil then return end
@@ -123,7 +126,8 @@ end
 findMessageLimit = function(message)
    local buffer = message
 
-   if buffer.length < 1 then
+   -- 2 chars: that's the minimum i can read anything from
+   if buffer.length < 2 then
       return nil
    end
 
