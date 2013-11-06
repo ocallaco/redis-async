@@ -78,7 +78,7 @@ local function decodeMultibulk(buffer)
 end
 
 local function findBulkLimit(buffer)
-   return nil if buffer.length < 1
+   if buffer.length < 1 then return nil end
 
    local first_delim = buffer:find(delim)
    
@@ -100,7 +100,7 @@ local function findBulkLimit(buffer)
 end
 
 local function findMultiBulkLimit(buffer)
-   return nil if buffer.length < 1
+   if buffer.length < 1 then return nil end
    local limit = buffer:find(delim)
 
    if limit == nil then return end
