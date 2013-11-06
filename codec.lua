@@ -85,7 +85,12 @@ local function findBulkLimit(buffer)
    end
 
    if first_delim then 
-      local msgend =  buffer:find(delim, first_delim + #delim)
+
+      local msgend = nil
+      if (first_delim + #delim) < buffer.length then
+         msgend = buffer:find(delim, first_delim + #delim)
+      end
+
       if msgend then
          return msgend + #delim - 1
       end
