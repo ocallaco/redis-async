@@ -38,6 +38,7 @@ function RedisClient.connect(domain, cb)
          end
       end
 
+      --TODO: handle multi subscribe
       for _,command in ipairs(commands.subscription) do
          client[command:lower()] = function(...)
             local com_args = List.new({command, ...})
