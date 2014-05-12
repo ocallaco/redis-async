@@ -9,7 +9,7 @@ redis.connect({host='localhost', port=6379}, function(client)
          list:append(res)
       end)
    end)
-   async.setTimeout(2100, function()
+   async.setTimeout(2100000, function()
       client.close()
       int.clear()
       for _,res in ipairs(list) do 

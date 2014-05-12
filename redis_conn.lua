@@ -14,6 +14,15 @@ local commands = require 'redis-async.commands'
 
 function RedisClient.connect(domain, cb)
    tcp.connect(domain, function(client)
+
+      local closing = false
+
+      local closefunc = client.close
+
+      client.close = function(cb)
+         closing = true
+         closefunc(cb)
+      end
      
       client.send = function(tbl)
          local req = codec.encode(tbl)
@@ -72,6 +81,12 @@ function RedisClient.connect(domain, cb)
 
          if callback then
             callback(res)
+         end
+      end)
+
+      client.onclose(function()
+         if not closing then
+            error("REDIS CONNECTION CLOSED")
          end
       end)
 
